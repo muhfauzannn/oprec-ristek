@@ -12,10 +12,9 @@ const Navbar = () => {
   // const [isLogin, setIsLogin] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const isUserLogged: userData = useUserLogged();
-  console.log(isUserLogged);
 
   return (
-    <div className="z-50 bg-primary font-geist h-fit fixed py-7 max-lg:py-6 max-md:py-5 max-sm:py-4 px-20 max-lg:px-14 max-md:px-12 max-sm:px-6 w-full flex justify-between items-center shadow-lg">
+    <div className="z-50 bg-primary font-geist h-fit fixed py-5 max-lg:py-4 max-md:py-3 max-sm:py-2 px-20 max-lg:px-14 max-md:px-12 max-sm:px-6 w-full flex justify-between items-center shadow-lg">
       <div className="p-1 rounded-full bg-secondary border border-tertiary">
         <div className="relative w-9 h-9 max-lg:w-8 max-lg:h-8 max-md:w-7 max-md:h-7 max-sm:w-6 max-sm:h-6">
           <Image
