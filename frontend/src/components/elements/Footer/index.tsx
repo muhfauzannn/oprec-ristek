@@ -6,8 +6,8 @@ import { socMed, accountData } from "./const";
 
 const Footer = () => {
   return (
-    <div className="w-full pt-20 pb-3 max-lg:py-16 max-md:py-12 max-sm:py-8 px-20 max-lg:px-14 max-md:px-12 max-sm:px-6 bg-secondary border-t border-tertiary rounded-t-[100px] max-lg:rounded-t-4xl flex flex-col gap-10 font-geist">
-      <div className="flex max-sm:flex-col max-sm:gap-8 justify-between">
+    <div className="relative w-full pt-20 pb-3 max-sm:pb-1 max-lg:py-16 max-md:py-12 max-sm:py-8 px-20 max-lg:px-14 max-md:px-12 max-sm:px-6 bg-secondary border-t border-tertiary rounded-t-[100px] max-lg:rounded-t-4xl flex flex-col gap-10 font-geist overflow-hidden">
+      <div className="z-10 flex max-sm:flex-col max-sm:gap-8 justify-between">
         <div className="flex h-full flex-col max-sm:items-center gap-7 max-lg:gap-6 max-md:gap-5 max-sm:gap-4">
           <div className="flex items-center gap-1">
             <div className="relative w-10 h-10 max-lg:w-9 max-lg:h-9 max-md:w-8 max-md:h-8 max-sm:w-7 max-sm:h-7">
@@ -65,12 +65,15 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="z-10 flex flex-col gap-5">
         <div className="h-[1px] w-full bg-tertiary"></div>
         <p className="text-tertiary text-sm max-sm:text-xs">
           Copyright © 2025 by Fauzan. All right Reserved
         </p>
       </div>
+
+      {/* BACKGROUND */}
+      <div className="z-[0] right-0 translate-x-[50%] absolute w-100 h-100 max-lg:w-60 max-lg:h-60 bg-tertiary rounded-full blur-[300px]"></div>
     </div>
   );
 };
