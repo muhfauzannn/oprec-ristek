@@ -48,7 +48,7 @@ const Navbar = () => {
           <Button className="text-base" size="lg">
             Login
           </Button>
-          <Button className="text-base" size="lg">
+          <Button variant={"secondary"} className="text-base" size="lg">
             Sign Up
           </Button>
         </div>
