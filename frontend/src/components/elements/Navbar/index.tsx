@@ -45,12 +45,16 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="flex gap-3 max-lg:hidden">
-          <Button className="text-base" size="lg">
-            Login
-          </Button>
-          <Button variant={"secondary"} className="text-base" size="lg">
-            Sign Up
-          </Button>
+          <Link href="/login">
+            <Button className="text-base" size="lg">
+              Login
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button variant={"secondary"} className="text-base" size="lg">
+              Sign Up
+            </Button>
+          </Link>
         </div>
       )}
 
