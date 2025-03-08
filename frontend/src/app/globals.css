@@ -5,7 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 body{
     background-color: var(--color-primary);
+    scroll-behavior: smooth;
 }
+
 
 :root {
     --background: oklch(1 0 0);
@@ -135,4 +137,5 @@ body{
 
     --font-geist: 'Geist Mono', sans-serif;
     --font-roboto: 'Roboto', sans-serif;
+    --font-ubuntuSans: 'Ubuntu Sans', sans-serif;
 }

@@ -1,3 +1,4 @@
+import Landing from "@/modules/LandingModules";
 export default function Home() {
-  return <div className="h-screen"></div>;
+  return <Landing />;
 }
