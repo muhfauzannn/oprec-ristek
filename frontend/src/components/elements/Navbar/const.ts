@@ -9,7 +9,7 @@ export const NavbarData = [
     },
     {
       name: "Create Try Out",
-      link: "/",
+      link: "/create",
     },
     {
       name: "About",

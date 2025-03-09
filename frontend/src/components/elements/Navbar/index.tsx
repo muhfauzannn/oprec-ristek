@@ -28,7 +28,7 @@ const Navbar = () => {
       <div className="max-lg:hidden bg-secondary py-2 px-8 rounded-full border border-tertiary text-white font-geist flex items-center gap-6">
         {NavbarData.map((item, index) => {
           return (
-            <Link href="/" key={index}>
+            <Link href={item.link} key={index}>
               <div className="hover:bg-tertiary/10 py-1 px-5 rounded-full duration-300 w-max">
                 {item.name}
               </div>
@@ -68,7 +68,7 @@ const Navbar = () => {
         <div
           className={`absolute duration-300 text-white p-5 ${
             isActive ? "visible opacity-100" : "invisible opacity-0"
-          } right-0 top-[130%] bg-quinary/10 rounded-3xl flex flex-col gap-2`}
+          } right-0 top-[130%] bg-secondary/90 rounded-3xl flex flex-col gap-2 border border-tertiary`}
         >
           {NavbarData.map((item, index) => {
             return (
