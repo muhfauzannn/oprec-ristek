@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Ubuntu_Sans } from "next/font/google";
 import Navbar from "@/components/elements/Navbar";
 import Footer from "@/components/elements/Footer";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,6 +37,16 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
+        <Toaster
+          toastOptions={{
+            style: {
+              borderRadius: "1rem",
+              background: "var(--color-secondary)",
+              color: "var(--color-tertiary)",
+              border: "1px solid var(--color-tertiary)",
+            },
+          }}
+        />
         <Footer />
       </body>
     </html>

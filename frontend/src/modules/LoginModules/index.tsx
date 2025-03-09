@@ -3,12 +3,39 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const LoginModules = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const isFormValid = email && password.length >= 6;
+
+  const onSubmit = async () => {
+    const loadingToast = toast.loading("Loading...");
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_SERVER_URL + "/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      }
+    );
+
+    toast.dismiss(loadingToast);
+    if (!response.ok) {
+      toast.error("Email or password incorrect!");
+      return;
+    } else {
+      toast.success("Login success");
+      router.push("/dashboard");
+      router.refresh();
+    }
+  };
 
   return (
     <div className="relative h-screen w-full flex flex-row-reverse">
@@ -19,8 +46,8 @@ const LoginModules = () => {
             <Image
               src="/logocontoh.png"
               alt="hero"
-              layout="fill"
-              objectFit="contain"
+              fill
+              style={{ objectFit: "contain" }}
             />
           </div>
         </div>
@@ -42,9 +69,11 @@ const LoginModules = () => {
             />
           </div>
           <Button
+            type="button"
             variant={"secondary"}
             className="py-6 mt-2 rounded-2xl text-base"
             disabled={!isFormValid}
+            onClick={onSubmit}
           >
             Login
           </Button>
@@ -56,4 +85,5 @@ const LoginModules = () => {
     </div>
   );
 };
+
 export default LoginModules;

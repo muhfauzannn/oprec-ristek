@@ -5,13 +5,12 @@ import Link from "next/link";
 import { NavbarData } from "./const";
 import { Menu, X, LogIn, SquarePen, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import useUserLogged from "@/hooks/userLogged";
-import { userData } from "@/hooks/interface";
+import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
   // const [isLogin, setIsLogin] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const isUserLogged: userData = useUserLogged();
+  const { user } = useAuth();
 
   return (
     <div className="z-50 bg-primary font-geist h-fit fixed py-5 max-lg:py-4 max-md:py-3 max-sm:py-2 px-20 max-lg:px-14 max-md:px-12 max-sm:px-6 w-full flex justify-between items-center shadow-lg">
@@ -38,9 +37,9 @@ const Navbar = () => {
           );
         })}
       </div>
-      {isUserLogged.isLogin ? (
+      {user ? (
         <div className="max-lg:hidden cursor-not-allowed bg-secondary flex text-white items-center gap-2 text-lg border border-tertiary px-5 py-2 rounded-full">
-          {isUserLogged.userName}
+          {user.email}
           <ChevronDown className="w-5 h-5 " />
         </div>
       ) : (
@@ -83,7 +82,7 @@ const Navbar = () => {
               </Link>
             );
           })}
-          {isUserLogged.isLogin ? null : (
+          {user ? null : (
             <>
               <Link
                 href="/"
