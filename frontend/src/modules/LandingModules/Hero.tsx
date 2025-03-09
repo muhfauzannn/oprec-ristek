@@ -2,6 +2,7 @@
 import Typical from "react-typical";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -25,7 +26,9 @@ const Hero = () => {
             your knowledge while having a great time!
           </p>
           <div className="flex gap-4 font-geist max-sm:justify-center">
-            <Button className="py-6 text-base">Get Started</Button>
+            <Link href="/home">
+              <Button className="py-6 text-base">Get Started</Button>
+            </Link>
             <Button
               className="py-6 text-base cursor-not-allowed"
               variant="secondary"

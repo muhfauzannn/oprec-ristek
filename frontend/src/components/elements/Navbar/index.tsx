@@ -8,7 +8,6 @@ import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
-  // const [isLogin, setIsLogin] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const { user } = useAuth();
 

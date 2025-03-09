@@ -32,7 +32,9 @@ const Register = () => {
       toast.error("User has already been registered...");
       return;
     }
-    toast.success("Register success, You will be redirectered to login page...");
+    toast.success(
+      "Register success, You will be redirectered to login page..."
+    );
     router.push("/login");
   };
 
