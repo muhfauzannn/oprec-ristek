@@ -1,0 +1,112 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model user {
+  id               String          @id @default(uuid())
+  name             String?
+  email            String?         @unique
+  password         String?
+  created_at       DateTime        @default(now())
+  
+  // Opposite relation fields
+  // Satu user bisa memiliki banyak tryout
+  tryouts         tryout[]
+  // Satu user bisa memiliki banyak tryout_attempt
+  tryout_attempts tryout_attempt[]
+}
+
+model category {
+  id         String   @id @default(uuid())
+  name       String?
+  created_at DateTime @default(now())
+  
+  // Opposite relation field
+  // Satu category bisa memiliki banyak tryout
+  tryouts tryout[]
+}
+
+model tryout {
+  id         String      @id @default(uuid())
+  name       String?
+  user_id    String
+  category   String
+  created_at DateTime     @default(now())
+  updated_at DateTime     @default(now())
+  duration   Int?
+
+  // Relasi ke user (harus ada opposite relation field di model user)
+  user      user      @relation(fields: [user_id], references: [id])
+  // Relasi ke category (harus ada opposite relation field di model category)
+  category_ category  @relation(fields: [category], references: [id])
+
+  // Opposite relation fields
+  // Satu tryout bisa memiliki banyak question
+  questions question[]
+  // Satu tryout bisa memiliki banyak tryout_attempt
+  attempts  tryout_attempt[]
+}
+
+enum QuestionType {
+  multiple_choice
+  multiple_select
+  true_false
+  short_answer
+}
+
+model question {
+  id             String          @id @default(uuid())
+  tryout_id      String
+  question_desc  String?
+  type           QuestionType
+  correct_answer String?
+  created_at     DateTime        @default(now())
+
+  // Relasi ke tryout (dengan opposite relation field questions di model tryout)
+  tryout       tryout       @relation(fields: [tryout_id], references: [id])
+
+  // Opposite relation fields
+  // Satu question bisa memiliki banyak choices
+  choices      choices[]
+  // Satu question bisa memiliki banyak user_answer
+  user_answers user_answer[]
+}
+
+model choices {
+  id          String   @id @default(uuid())
+  question_id String
+  choices     String?
+  is_correct  Boolean
+
+  // Relasi ke question (dengan opposite relation field choices di model question)
+  question question @relation(fields: [question_id], references: [id])
+}
+
+model tryout_attempt {
+  id         String   @id @default(uuid())
+  tryout_id  String
+  user_id    String
+  start_at   DateTime?
+  end_at     DateTime?
+  created_at DateTime  @default(now())
+
+  // Relasi ke tryout dan user (opposite relation fields: attempts di tryout, tryout_attempts di user)
+  tryout tryout @relation(fields: [tryout_id], references: [id])
+  user   user   @relation(fields: [user_id], references: [id])
+}
+
+model user_answer {
+  id          String   @id @default(uuid())
+  question_id String
+  answer      String?  // Merujuk ke field 'id' di model 'choices' bila diperlukan
+  answer_text String?
+  created_at  DateTime @default(now())
+
+  // Relasi ke question (opposite relation field: user_answers di model question)
+  question question @relation(fields: [question_id], references: [id])
+}
