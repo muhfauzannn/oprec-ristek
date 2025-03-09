@@ -1,5 +1,14 @@
 // src/tryout/tryout.controller.ts
-import { Controller, Post, Get, Body, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Req,
+  UseGuards,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { TryoutService } from './tryout.service';
 import { CreateTryoutDto } from './dto/create.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
@@ -33,5 +42,21 @@ export class TryoutController {
   async getTryoutById(@Req() req: Request) {
     const id = req.params.id;
     return this.tryoutService.getTryoutById(id);
+  }
+
+  @Put(':id')
+  async updateTryout(@Req() req: Request, @Body() dto: CreateTryoutDto) {
+    const id = req.params.id;
+    const user = req.user as { userId: string; email: string };
+    const userId = user.userId;
+    return this.tryoutService.editTryOut(dto, id, userId);
+  }
+
+  @Delete(':id')
+  async deleteTryout(@Req() req: Request) {
+    const id = req.params.id;
+    const user = req.user as { userId: string; email: string };
+    const userId = user.userId;
+    return this.tryoutService.deleteTryOut(id, userId);
   }
 }

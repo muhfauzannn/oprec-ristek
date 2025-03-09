@@ -7,6 +7,22 @@ import { CreateTryoutDto } from './dto/create.dto';
 export class TryoutService {
   constructor(private prisma: PrismaService) {}
 
+  async createTryout(dto: CreateTryoutDto, userId: string) {
+    const data = await this.prisma.tryout.create({
+      data: {
+        name: dto.name,
+        category: dto.category, // Harus sesuai dengan enum di schema
+        duration: dto.duration,
+        user_id: userId,
+      },
+    });
+    return {
+      success: true,
+      message: 'Tryout berhasil dibuat',
+      data: data.id,
+    };
+  }
+
   async getAllTryouts() {
     const data = await this.prisma.tryout.findMany({
       include: {
@@ -39,22 +55,6 @@ export class TryoutService {
       success: true,
       message: 'Berhasil mendapatkan data tryout',
       data: result,
-    };
-  }
-
-  async createTryout(dto: CreateTryoutDto, userId: string) {
-    const data = await this.prisma.tryout.create({
-      data: {
-        name: dto.name,
-        category: dto.category, // Harus sesuai dengan enum di schema
-        duration: dto.duration,
-        user_id: userId,
-      },
-    });
-    return {
-      success: true,
-      message: 'Tryout berhasil dibuat',
-      data: data.id,
     };
   }
 
@@ -129,6 +129,110 @@ export class TryoutService {
       success: true,
       message: 'Berhasil mendapatkan data tryout',
       data: result,
+    };
+  }
+
+  async editTryOut(dto: CreateTryoutDto, id: string, userId: string) {
+    const data = await this.prisma.tryout.findUnique({
+      where: { id: id },
+    });
+    if (!data) {
+      return {
+        success: false,
+        message: 'Data tryout tidak ditemukan',
+      };
+    }
+
+    if (data.user_id !== userId) {
+      return {
+        success: false,
+        message: 'Anda tidak memiliki akses untuk mengedit tryout ini',
+      };
+    }
+
+    const query = await this.prisma.tryout.update({
+      where: { id: id },
+      data: {
+        name: dto.name,
+        category: dto.category,
+        duration: dto.duration,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Data tryout berhasil diubah',
+      data: query,
+    };
+  }
+
+  async deleteTryOut(id: string, userId: string) {
+    // Cari tryout berdasarkan id
+    const tryout = await this.prisma.tryout.findUnique({
+      where: { id },
+    });
+
+    if (!tryout) {
+      return {
+        success: false,
+        message: 'Data tryout tidak ditemukan',
+      };
+    }
+
+    // Pastikan tryout dimiliki oleh user yang melakukan request
+    if (tryout.user_id !== userId) {
+      return {
+        success: false,
+        message: 'Anda tidak memiliki izin untuk menghapus tryout ini',
+      };
+    }
+
+    // Hapus tryout beserta data terkait dalam sebuah transaksi
+    const deletedTryout = await this.prisma.$transaction(async (prisma) => {
+      // Ambil semua pertanyaan yang terkait dengan tryout ini
+      const questions = await prisma.question.findMany({
+        where: { tryout_id: id },
+        select: { id: true },
+      });
+
+      const questionIds = questions.map((q) => q.id);
+
+      // Jika ada pertanyaan, hapus terlebih dahulu choices dan user_answer yang terkait
+      if (questionIds.length > 0) {
+        await prisma.choices.deleteMany({
+          where: {
+            question_id: { in: questionIds },
+          },
+        });
+        await prisma.user_answer.deleteMany({
+          where: {
+            question_id: { in: questionIds },
+          },
+        });
+      }
+
+      // Hapus pertanyaan
+      await prisma.question.deleteMany({
+        where: { tryout_id: id },
+      });
+
+      // Hapus tryout_attempt yang terkait dengan tryout ini
+      await prisma.tryout_attempt.deleteMany({
+        where: { tryout_id: id },
+      });
+
+      // Hapus tryout itu sendiri
+      const result = await prisma.tryout.delete({
+        where: { id },
+      });
+
+      return result;
+    });
+
+    return {
+      success: true,
+      message: 'Tryout berhasil dihapus',
+      data: deletedTryout,
     };
   }
 }
