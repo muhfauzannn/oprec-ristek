@@ -4,6 +4,10 @@ import { toast } from "sonner";
 export const verifyQuestions = (questions: Question[]) => {
   // toast("TERKLIK")
   let hasError = false;
+  if (questions.length === 0) {
+    toast.error("Minimal memiliki 1 pertanyaan");
+    hasError = true;
+  }
   questions.forEach((q, index) => {
     if (q.question_desc === "") {
       toast.error("Pertanyaan " + (index + 1) + " tidak boleh kosong");
@@ -54,7 +58,6 @@ export const verifyQuestions = (questions: Question[]) => {
     }
   });
   if (!hasError) {
-    toast("Sukses");
     return true;
   }
   return false;

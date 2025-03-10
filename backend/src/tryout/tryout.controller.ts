@@ -60,6 +60,15 @@ export class TryoutController {
     return result;
   }
 
+  @Get('/all/:id')
+  async getTryoutWithQuestionById(@Param('id') id: string) {
+    const result = await this.tryoutService.getTryoutById(id);
+    if (!result.success) {
+      throw new HttpException(result, HttpStatus.NOT_FOUND);
+    }
+    return result;
+  }
+
   @Put(':id')
   async updateTryout(
     @Param('id') id: string,

@@ -23,7 +23,7 @@ const CreateTryOutModules = () => {
   const isValid = name && category && duration;
 
   const handleSubmit = async () => {
-    const durationInteger = parseInt(duration) * 3600;
+    const durationInteger = parseInt(duration);
     const toastLoading = toast.loading("Loading...");
     // Panggil fungsi fetchDataClient
     const result: fetchDataResponse<string> = await fetchDataClient<string>(
@@ -40,7 +40,7 @@ const CreateTryOutModules = () => {
     toast.dismiss(toastLoading);
     if (result.success) {
       toast.success(result.message || "Tryout berhasil dibuat");
-      router.push(`/create/${result.data}`);
+      router.push(`/question/${result.data}`);
     } else {
       toast.error(result.message || "Gagal membuat tryout");
     }

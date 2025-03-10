@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedRoutes = ["/home"]; // Rute yang dilindungi
+const protectedRoutes = ["/home", "/create", "/tryout"]; // Rute yang dilindungi
 const publicRoutes = ["/login", "/signup"]; // Rute publik
 
 export function middleware(request: NextRequest) {

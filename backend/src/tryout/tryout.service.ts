@@ -58,7 +58,7 @@ export class TryoutService {
     };
   }
 
-  async getTryoutById(id: string) {
+  async getTryOutAndQuestions(id: string) {
     const data = await this.prisma.tryout.findUnique({
       where: { id: id },
       include: {
@@ -85,6 +85,57 @@ export class TryoutService {
       updated_at: data.updated_at,
       duration: data.duration,
       Author: data.user.name,
+    };
+
+    return {
+      success: true,
+      message: 'Berhasil mendapatkan data tryout',
+      data: result,
+    };
+  }
+  async getTryoutById(id: string) {
+    const data = await this.prisma.tryout.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { name: true },
+        },
+        questions: {
+          select: {
+            id: true,
+            question_desc: true,
+            type: true,
+            // Jangan kirimkan correct_answer
+            choices: {
+              select: {
+                id: true,
+                choices: true,
+                // Jangan kirimkan is_correct
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!data) {
+      return {
+        success: false,
+        message: 'Data tryout tidak ditemukan',
+      };
+    }
+
+    // Susun hasil akhir (dengan properti Author, dll)
+    const result = {
+      id: data.id,
+      name: data.name,
+      user_id: data.user_id,
+      category: data.category,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      duration: data.duration,
+      Author: data.user.name,
+      questions: data.questions, // Hanya berisi question_desc, type, dan choices tanpa sensitive field
     };
 
     return {
