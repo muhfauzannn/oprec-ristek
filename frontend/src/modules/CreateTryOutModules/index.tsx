@@ -33,7 +33,7 @@ const CreateTryOutModules = () => {
         body: JSON.stringify({
           name,
           category,
-          duration: durationInteger,
+          duration: durationInteger * 60 * 60,
         }),
       }
     );
