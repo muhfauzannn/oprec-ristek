@@ -1,6 +1,6 @@
 import CreateTryOutModules from "@/modules/CreateTryOutModules";
 
-const Create = () => {
+const CreateTryOutPage = () => {
   return <CreateTryOutModules />;
 };
-export default Create;
+export default CreateTryOutPage;
