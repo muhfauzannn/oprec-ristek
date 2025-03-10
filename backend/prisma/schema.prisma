@@ -1,0 +1,93 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model user {
+  id              String           @id @default(uuid())
+  name            String?
+  email           String?          @unique
+  password        String?
+  created_at      DateTime         @default(now())
+  
+  // Relation fields
+  tryouts         tryout[]
+  tryout_attempts tryout_attempt[]
+}
+
+enum TryOutCategories {
+  Math
+  Programming
+  Calculus
+  Business
+  Physics
+}
+
+model tryout {
+  id         String           @id @default(uuid())
+  name       String?
+  user_id    String
+  category   TryOutCategories
+  created_at DateTime         @default(now())
+  updated_at DateTime         @default(now())
+  duration   Int?
+
+  user       user             @relation(fields: [user_id], references: [id])
+  questions  question[]
+  attempts   tryout_attempt[]
+}
+
+enum QuestionType {
+  multiple_choice
+  multiple_select
+  true_false
+  short_answer
+}
+
+model question {
+  id             String          @id @default(uuid())
+  tryout_id      String
+  question_desc  String?
+  type           QuestionType
+  correct_answer String?
+  created_at     DateTime        @default(now())
+
+  tryout         tryout          @relation(fields: [tryout_id], references: [id])
+  choices        choices[]
+  user_answers   user_answer[]
+}
+
+model choices {
+  id          String    @id @default(uuid())
+  question_id String
+  choices     String?
+  is_correct  Boolean
+
+  question    question  @relation(fields: [question_id], references: [id])
+}
+
+model tryout_attempt {
+  id         String   @id @default(uuid())
+  tryout_id  String
+  user_id    String
+  start_at   DateTime?
+  end_at     DateTime?
+  created_at DateTime @default(now())
+
+  tryout     tryout   @relation(fields: [tryout_id], references: [id])
+  user       user     @relation(fields: [user_id], references: [id])
+}
+
+model user_answer {
+  id          String   @id @default(uuid())
+  question_id String
+  answer      String?  // merujuk ke id pada model choices (untuk pilihan ganda)
+  answer_text String?  // untuk short_answer
+  created_at  DateTime @default(now())
+
+  question    question @relation(fields: [question_id], references: [id])
+}
