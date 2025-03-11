@@ -62,7 +62,7 @@ const TryoutExam = () => {
 
   // Timer countdown
   useEffect(() => {
-    if (remainingTime <= 0) {
+    if (remainingTime <= 0 && tryout) {
       handleSubmit();
       return;
     }
