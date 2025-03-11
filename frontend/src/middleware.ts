@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     }
   } else if (publicRoutes.includes(path)) {
     if (token) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/home", request.url));
     }
   }
 
