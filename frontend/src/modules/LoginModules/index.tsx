@@ -32,7 +32,8 @@ const LoginModules = () => {
       return;
     } else {
       toast.success("Login success");
-      router.push("/home");
+      console.log("Login success");
+      router.push("/home" + "");
       router.refresh();
     }
   };

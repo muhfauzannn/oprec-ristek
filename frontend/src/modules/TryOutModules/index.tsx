@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { fetchDataClient, fetchDataResponse } from "@/lib/fetch";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 // Enum dan interface
 export enum QuestionType {
@@ -40,6 +41,7 @@ export interface Tryout {
 }
 
 const TryoutExam = () => {
+  const router = useRouter();
   const { slug } = useParams();
   const [tryout, setTryOut] = useState<Tryout | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -53,6 +55,7 @@ const TryoutExam = () => {
   // Fungsi submit, didefinisikan terlebih dahulu
   const handleSubmit = async () => {
     // Di sini Anda bisa memanggil API submit tryout jika diinginkan
+    router.push("/home");
     toast.info("Tryout selesai");
     console.log(tryout);
   };
